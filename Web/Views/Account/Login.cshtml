@@ -22,11 +22,14 @@
                     <label asp-for="Password" class="form-label"></label>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <div>
+                <div class="btn-reg">
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
                 </div>
             </form>
         </section>
+        <div class="">
+            <p class="text-lg-center"><a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
+        </div>
     </div>
 </div>
 

@@ -46,3 +46,12 @@ input.input-validation-error {
 .navbar-brand {
   text-decoration: underline;
 }
+
+.btn-reg {
+  margin-bottom: 20px;
+}
+
+.navbar-brand {
+  margin: 0;
+  padding: 0;
+}
