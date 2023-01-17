@@ -1,0 +1,11 @@
+﻿.idea
+test-back Abanking.sln.DotSettings.user
+Api/Dockerfile
+Logic/Dockerfile
+Web/Dockerfile
+Api/bin
+Api/obj
+Logic/bin
+Logic/obj
+Web/bin
+Web/obj
