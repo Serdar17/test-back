@@ -15,8 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// builder.Services.AddRazorPages()
-//     .AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
     opt.UseInMemoryDatabase("UserDb");
@@ -26,13 +24,6 @@ builder.Services.AddScoped<IAccountManager, AccountManager>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(Program));
-
-// // Добавление Аутентификации по кукам
-// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//     .AddCookie(opt =>
-//     {
-//         opt.LoginPath = new PathString("/Account/Register");
-//     });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddCookie(opt =>
@@ -51,8 +42,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("some_secret_key17!"))
     };
 });
-
-// builder.Services.AddAuthorization();
 
 // builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
