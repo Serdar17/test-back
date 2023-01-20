@@ -39,23 +39,20 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register([FromForm] RegisterRequest registerRequest)
     {
-        if (ModelState.IsValid)
-        {
-            var user = _mapper.Map<User>(registerRequest);
-            var response = await _accountManager.RegisterAsync(user);
+        var user = _mapper.Map<User>(registerRequest);
+        var response = await _accountManager.RegisterAsync(user);
 
-            if (response.StatusCode == 200)
-            {
-                HttpContext.Session.SetString("Token", response.Token);
-                return RedirectToAction("Index", "Home");
-            }
-            
-            if (response.PhoneDescription != null)
-                ModelState.AddModelError("Phone", response.PhoneDescription);
-            
-            if (response.Description != null)
-                ModelState.AddModelError("Email", response.Description);
+        if (response.StatusCode == 200)
+        {
+            HttpContext.Session.SetString("Token", response.Token);
+            return RedirectToAction("Index", "Home");
         }
+        
+        if (response.PhoneDescription != null)
+            ModelState.AddModelError("Phone", response.PhoneDescription);
+        
+        if (response.Description != null)
+            ModelState.AddModelError("Email", response.Description);
         return View(registerRequest);
     }
     
@@ -69,20 +66,16 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login([FromForm] LoginRequest loginRequest)
     {
-        if (ModelState.IsValid)
+        var user = _mapper.Map<User>(loginRequest);
+        var response = await _accountManager.LogInAsync(user);
+        
+        if (response.StatusCode == 200)
         {
-            var user = _mapper.Map<User>(loginRequest);
-            var response = await _accountManager.LogInAsync(user);
-            
-            if (response.StatusCode == 200)
-            {
-                HttpContext.Session.SetString("Token", response.Token);
-                return RedirectToAction("Index", "Cabinet");
-            }
-
-            ModelState.AddModelError("Phone", response.Description);
-            
+            HttpContext.Session.SetString("Token", response.Token);
+            return RedirectToAction("Index", "Cabinet");
         }
+
+        ModelState.AddModelError("Phone", response.Description);
         return View(loginRequest);
     }
 }

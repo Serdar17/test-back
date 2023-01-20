@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Api.Models;
+﻿using Api.Models;
 using AutoMapper;
 using Logic.Models;
 using Logic.Models.Repository.Interfaces;
@@ -27,46 +26,38 @@ public class AccountApiController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest registerRequest)
     {
-        if (ModelState.IsValid)
+        var user = _mapper.Map<User>(registerRequest);
+        var response = await _accountManager.RegisterAsync(user);
+        
+        if (response.StatusCode == 200)
         {
-            var user = _mapper.Map<User>(registerRequest);
-            var response = await _accountManager.RegisterAsync(user);
-            
-            if (response.StatusCode == 200)
-            {
-                return Ok();
-            }
-
-            return BadRequest(new ErrorResponse()
-            {
-                Code = "400",
-                Message = response.Description
-            });
+            return Ok();
         }
-        return BadRequest();
+
+        return BadRequest(new ErrorResponse()
+        {
+            Code = "400",
+            Message = response.Description
+        });
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
-        if (ModelState.IsValid)
+        var user = _mapper.Map<User>(loginRequest);
+        var response = await _accountManager.LogInAsync(user);
+        
+        if (response.StatusCode == 200)
         {
-            var user = _mapper.Map<User>(loginRequest);
-            var response = await _accountManager.LogInAsync(user);
-            
-            if (response.StatusCode == 200)
-            {
-                HttpContext.Session.SetString("Token", response.Token);
-                return Ok();
-            }
-
-            return BadRequest(new ErrorResponse()
-            {
-                Code = "400",
-                Message = response.Description
-            });
+            HttpContext.Session.SetString("Token", response.Token);
+            return Ok();
         }
-        return BadRequest();
+
+        return BadRequest(new ErrorResponse()
+        {
+            Code = "400",
+            Message = response.Description
+        });
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
